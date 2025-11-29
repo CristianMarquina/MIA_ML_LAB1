@@ -162,20 +162,20 @@ function buildClassANN(numInputs::Int, topology::AbstractArray{<:Int,1}, numOutp
     numInputsLayer = numInputs
 
     # Empty Chain to hold the layers of the ANN
-    ann = Chain();
+    ann = Flux.Chain();
 
     # Add hidden layers
     for (i, numOutputsLayer) in enumerate(topology)      
-        ann = Chain(ann..., Dense(numInputsLayer, numOutputsLayer, transferFunctions[i]));      
+        ann = Flux.Chain(ann..., Dense(numInputsLayer, numOutputsLayer, transferFunctions[i]));      
         numInputsLayer = numOutputsLayer; 
     end
     #Final output layer
     if numOutputs == 1
-        ann = Chain(ann..., Dense(numInputsLayer, numOutputs, σ))
+        ann = Flux.Chain(ann..., Dense(numInputsLayer, numOutputs, σ))
     else 
         # Multi-class classification: output layer N neurons and no activation function
-        ann = Chain(ann..., Dense(numInputsLayer, numOutputs, identity))
-        ann = Chain(ann..., softmax);
+        ann = Flux.Chain(ann..., Dense(numInputsLayer, numOutputs, identity))
+        ann = Flux.Chain(ann..., softmax);
     end
     return ann
 end
